@@ -4,10 +4,11 @@ const nextConfig = {
     // Adjust these to your final domains:
     const FRAME_ANCESTORS = [
       "'self'",
-      "https://*.webflow.io",
-      "https://elevatedmovements.webflow.io",
-      "https://elevatedmovements.com",
-      "https://*.elevatedmovements.com"
+      "https://preview.webflow.com",           // Webflow Designer preview
+      "https://*.webflow.io",                  // published on webflow.io
+      "https://elevatedmovements.webflow.io",  // your specific webflow io site (optional if covered above)
+      "https://elevatedmovements.com",         // custom domain (root)
+      "https://*.elevatedmovements.com",       // any subdomains
     ].join(" ");
 
     return [

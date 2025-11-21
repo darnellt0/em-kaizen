@@ -29,19 +29,31 @@ type TrackerState = {
 const STORAGE_KEY = "em-kaizen-1pct-tracker";
 
 function useLocalStorage<T>(key: string, initial: T) {
-  const [state, setState] = useState<T>(() => {
-    try {
-      const raw = typeof window !== "undefined" ? localStorage.getItem(key) : null;
-      return raw ? (JSON.parse(raw) as T) : initial;
-    } catch {
-      return initial;
-    }
-  });
+  const [mounted, setMounted] = useState(false);
+  const [state, setState] = useState<T>(initial);
+
   useEffect(() => {
     try {
-      localStorage.setItem(key, JSON.stringify(state));
-    } catch {}
-  }, [key, state]);
+      const raw = localStorage.getItem(key);
+      if (raw) {
+        setState(JSON.parse(raw) as T);
+      }
+    } catch (e) {
+      console.error("localStorage read error:", e);
+    }
+    setMounted(true);
+  }, [key]);
+
+  useEffect(() => {
+    if (mounted) {
+      try {
+        localStorage.setItem(key, JSON.stringify(state));
+      } catch (e) {
+        console.error("localStorage write error:", e);
+      }
+    }
+  }, [key, state, mounted]);
+
   return [state, setState] as const;
 }
 
